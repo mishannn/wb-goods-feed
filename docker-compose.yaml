@@ -1,0 +1,7 @@
+services:
+  app:
+    build: ./
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHANNEL_NAME: ${TELEGRAM_CHANNEL_NAME}
+      POST_PUBLISH_PERIOD: '@every 5m'
