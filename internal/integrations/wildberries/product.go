@@ -48,18 +48,18 @@ type Meta struct {
 }
 
 type Size struct {
-	Name           string `json:"name"`
-	OrigName       string `json:"origName"`
-	Rank           int64  `json:"rank"`
-	OptionID       int64  `json:"optionId"`
-	Wh             int64  `json:"wh"`
-	Dtype          int64  `json:"dtype"`
-	Price          Price  `json:"price"`
-	SaleConditions int64  `json:"saleConditions"`
-	Payload        string `json:"payload"`
+	Name           string       `json:"name"`
+	OrigName       string       `json:"origName"`
+	Rank           int64        `json:"rank"`
+	OptionID       int64        `json:"optionId"`
+	Wh             int64        `json:"wh"`
+	Dtype          int64        `json:"dtype"`
+	Price          ProductPrice `json:"price"`
+	SaleConditions int64        `json:"saleConditions"`
+	Payload        string       `json:"payload"`
 }
 
-type Price struct {
+type ProductPrice struct {
 	Basic     int64 `json:"basic"`
 	Product   int64 `json:"product"`
 	Total     int64 `json:"total"`

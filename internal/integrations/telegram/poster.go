@@ -36,8 +36,15 @@ func (p *Poster) PublishPost(post feed.Post) error {
 
 	var err error
 	if len(post.Images) != 0 {
-		photos := make([]interface{}, 0, len(post.Images))
-		for imageIndex, image := range post.Images[0:5] {
+		var photosLimit int
+		if len(post.Images) >= 10 {
+			photosLimit = 10
+		} else {
+			photosLimit = len(post.Images)
+		}
+
+		photos := make([]interface{}, 0, photosLimit)
+		for imageIndex, image := range post.Images[0:photosLimit] {
 			photo := tgbotapi.NewInputMediaPhoto(tgbotapi.FileURL(image.URL))
 			if imageIndex == 0 {
 				photo.Caption = text

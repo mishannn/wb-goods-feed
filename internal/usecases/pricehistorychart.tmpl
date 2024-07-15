@@ -1,0 +1,14 @@
+---
+config:
+    xyChart:
+        width: 600
+        height: 400
+    themeVariables:
+        xyChart:
+            plotColorPalette: "#8836c8"
+---
+xychart-beta
+    title "Динамика цены"
+    x-axis [{{ join .Days ", " }}]
+    y-axis "Цена"
+    line [{{join .Prices ", "}}]
