@@ -3,5 +3,6 @@ services:
     build: ./
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHANNEL_NAME: ${TELEGRAM_CHANNEL_NAME}
-      POST_PUBLISH_PERIOD: '@every 5m'
+    volumes:
+      - ./cmd/wbgoodsfeed/config.yaml:/config.yaml
+    command: run -c /config.yaml
