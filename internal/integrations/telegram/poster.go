@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"fmt"
+	"os"
 
 	"example.org/wbsniper/internal/entities/feed"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -12,7 +13,13 @@ type Poster struct {
 	channelName string
 }
 
-func NewPoster(botToken string, channelName string) (*Poster, error) {
+func NewPoster(botTokenEnv string, channelName string) (*Poster, error) {
+	// Classic bot token
+	botToken := os.Getenv(botTokenEnv)
+	if botToken == "" {
+		return nil, fmt.Errorf("Bot token env var %s is not set", botTokenEnv)
+	}
+
 	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
 		return nil, fmt.Errorf("can't initialize telegram bot: %w", err)
