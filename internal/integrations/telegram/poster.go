@@ -34,7 +34,7 @@ func NewPoster(botTokenEnv string, chatID int64) (*Poster, error) {
 func (p *Poster) PublishPost(post feed.Post) error {
 	text := fmt.Sprintf("*%s*\n\n%s\n\n[Открыть карточку товара](%s)", post.Title, post.Content, post.Link)
 
-	var chatItem tgbotapi.Chattable
+	var err error
 	if len(post.Images) != 0 {
 		photos := make([]interface{}, 0, len(post.Images))
 		for imageIndex, image := range post.Images[0:5] {
@@ -45,14 +45,14 @@ func (p *Poster) PublishPost(post feed.Post) error {
 			}
 			photos = append(photos, photo)
 		}
-		chatItem = tgbotapi.NewMediaGroup(p.chatID, photos)
+		mediaGroup := tgbotapi.NewMediaGroup(p.chatID, photos)
+		_, err = p.bot.SendMediaGroup(mediaGroup)
 	} else {
 		message := tgbotapi.NewMessage(p.chatID, text)
 		message.ParseMode = "Markdown"
-		chatItem = message
+		_, err = p.bot.Send(message)
 	}
 
-	_, err := p.bot.Send(chatItem)
 	if err != nil {
 		return fmt.Errorf("can't send telegram message: %w", err)
 	}
