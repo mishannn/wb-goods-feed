@@ -9,11 +9,11 @@ import (
 )
 
 type Poster struct {
-	bot         *tgbotapi.BotAPI
-	channelName string
+	bot    *tgbotapi.BotAPI
+	chatID int64
 }
 
-func NewPoster(botTokenEnv string, channelName string) (*Poster, error) {
+func NewPoster(botTokenEnv string, chatID int64) (*Poster, error) {
 	// Classic bot token
 	botToken := os.Getenv(botTokenEnv)
 	if botToken == "" {
@@ -26,16 +26,33 @@ func NewPoster(botTokenEnv string, channelName string) (*Poster, error) {
 	}
 
 	return &Poster{
-		bot:         bot,
-		channelName: channelName,
+		bot:    bot,
+		chatID: chatID,
 	}, nil
 }
 
 func (p *Poster) PublishPost(post feed.Post) error {
-	message := tgbotapi.NewMessageToChannel(p.channelName, fmt.Sprintf("*%s*\n\n%s\n\n[Открыть карточку товара](%s)", post.Title, post.Content, post.Link))
-	message.ParseMode = "Markdown"
+	text := fmt.Sprintf("*%s*\n\n%s\n\n[Открыть карточку товара](%s)", post.Title, post.Content, post.Link)
 
-	_, err := p.bot.Send(message)
+	var chatItem tgbotapi.Chattable
+	if len(post.Images) != 0 {
+		photos := make([]interface{}, 0, len(post.Images))
+		for imageIndex, image := range post.Images[0:5] {
+			photo := tgbotapi.NewInputMediaPhoto(tgbotapi.FileURL(image.URL))
+			if imageIndex == 0 {
+				photo.Caption = text
+				photo.ParseMode = "Markdown"
+			}
+			photos = append(photos, photo)
+		}
+		chatItem = tgbotapi.NewMediaGroup(p.chatID, photos)
+	} else {
+		message := tgbotapi.NewMessage(p.chatID, text)
+		message.ParseMode = "Markdown"
+		chatItem = message
+	}
+
+	_, err := p.bot.Send(chatItem)
 	if err != nil {
 		return fmt.Errorf("can't send telegram message: %w", err)
 	}

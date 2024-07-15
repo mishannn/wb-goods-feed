@@ -31,6 +31,7 @@ func (f *Fetcher) GetProducts() ([]product.Product, error) {
 			Brand:       wbProduct.Brand,
 			Rating:      float32(wbProduct.ReviewRating),
 			ReviewCount: int(wbProduct.Feedbacks),
+			Images:      getProductImages(wbProduct),
 			Link:        fmt.Sprintf("https://www.wildberries.ru/catalog/%d/detail.aspx", wbProduct.ID),
 		})
 	}

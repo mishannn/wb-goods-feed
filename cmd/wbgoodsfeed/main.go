@@ -23,7 +23,7 @@ func exec(configPath string, withCron bool) error {
 
 	chooser := &product.DefaultChooser{}
 
-	poster, err := telegram.NewPoster(config.Poster.Options.BotTokenEnv, config.Poster.Options.ChannelName)
+	poster, err := telegram.NewPoster(config.Poster.Options.BotTokenEnv, config.Poster.Options.ChatID)
 	if err != nil {
 		log.Panic(fmt.Errorf("can't create poster: %w", err))
 	}

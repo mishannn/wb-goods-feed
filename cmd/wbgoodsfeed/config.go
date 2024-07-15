@@ -12,7 +12,7 @@ type Config struct {
 	Poster   struct {
 		Options struct {
 			BotTokenEnv string `yaml:"bot_token_env"`
-			ChannelName string `yaml:"channel_name"`
+			ChatID      int64  `yaml:"chat_id"`
 		} `yaml:"options"`
 	} `yaml:"poster"`
 }

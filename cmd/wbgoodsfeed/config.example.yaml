@@ -2,4 +2,4 @@ interval: '*/5 * * * *'
 poster:
   options:
     bot_token_env: TELEGRAM_BOT_TOKEN
-    channel_name: '@channelname'
+    chat_id: -1000000000000

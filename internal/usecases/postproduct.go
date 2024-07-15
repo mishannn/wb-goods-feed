@@ -32,9 +32,15 @@ func (pp *PostProduct) Do() error {
 		return fmt.Errorf("can't choose product: %w", err)
 	}
 
+	postImages := make([]feed.Image, 0, len(product.Images))
+	for _, productImage := range product.Images {
+		postImages = append(postImages, feed.Image(productImage))
+	}
+
 	post := feed.Post{
 		Title:   fmt.Sprintf("%s от %s", product.Name, product.Brand),
 		Content: fmt.Sprintf("Рейтинг ⭐️ %.1f на 💬 %d отзывов", product.Rating, product.ReviewCount),
+		Images:  postImages,
 		Link:    product.Link,
 	}
 
