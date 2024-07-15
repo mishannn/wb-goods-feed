@@ -3,7 +3,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./
-RUN go build -o /wbgoodsfeed ./cmd/wbgoodsfeed
+RUN CGO_ENABLED=0 GOOS=linux go build -o /wbgoodsfeed ./cmd/wbgoodsfeed
 
 FROM alpine:3
 COPY --from=builder /wbgoodsfeed /wbgoodsfeed
