@@ -17,7 +17,7 @@ func NewPoster(botTokenEnv string, chatID int64) (*Poster, error) {
 	// Classic bot token
 	botToken := os.Getenv(botTokenEnv)
 	if botToken == "" {
-		return nil, fmt.Errorf("Bot token env var %s is not set", botTokenEnv)
+		return nil, fmt.Errorf("bot token env var %s is not set", botTokenEnv)
 	}
 
 	bot, err := tgbotapi.NewBotAPI(botToken)
