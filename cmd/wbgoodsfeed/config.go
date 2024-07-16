@@ -15,6 +15,11 @@ type Config struct {
 			ChatID      int64  `yaml:"chat_id"`
 		} `yaml:"options"`
 	} `yaml:"poster"`
+	URLShortener struct {
+		Options struct {
+			AccessToken string `yaml:"access_token"`
+		} `yaml:"options"`
+	} `yaml:"url_shortener"`
 }
 
 func readConfig(configPath string) (*Config, error) {

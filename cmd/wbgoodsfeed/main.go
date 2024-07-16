@@ -7,6 +7,7 @@ import (
 
 	"github.com/mishannn/wb-goods-feed/internal/entities/product"
 	"github.com/mishannn/wb-goods-feed/internal/integrations/telegram"
+	"github.com/mishannn/wb-goods-feed/internal/integrations/vk"
 	"github.com/mishannn/wb-goods-feed/internal/integrations/wildberries"
 	"github.com/mishannn/wb-goods-feed/internal/usecases"
 	"github.com/robfig/cron/v3"
@@ -28,7 +29,9 @@ func exec(configPath string, withCron bool) error {
 		log.Panic(fmt.Errorf("can't create poster: %w", err))
 	}
 
-	pp := usecases.NewPostProduct(fetcher, chooser, poster)
+	urlShortener := vk.NewURLShortener(config.URLShortener.Options.AccessToken)
+
+	pp := usecases.NewPostProduct(fetcher, chooser, poster, urlShortener)
 
 	if !withCron {
 		log.Printf("Find product\n")

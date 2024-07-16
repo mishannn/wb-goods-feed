@@ -3,3 +3,6 @@ poster:
   options:
     bot_token_env: TELEGRAM_BOT_TOKEN
     chat_id: -1000000000000
+url_shortener:
+  options:
+    access_token: token

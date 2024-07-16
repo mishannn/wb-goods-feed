@@ -49,16 +49,18 @@ func generatePriceHistoryChartLink(priceHistory []product.PriceHistoryItem) (str
 }
 
 type PostProduct struct {
-	fetcher product.Fetcher
-	chooser product.Chooser
-	poster  feed.Poster
+	fetcher      product.Fetcher
+	chooser      product.Chooser
+	poster       feed.Poster
+	URLShortener feed.URLShortener
 }
 
-func NewPostProduct(fetcher product.Fetcher, chooser product.Chooser, poster feed.Poster) *PostProduct {
+func NewPostProduct(fetcher product.Fetcher, chooser product.Chooser, poster feed.Poster, URLShortener feed.URLShortener) *PostProduct {
 	return &PostProduct{
-		fetcher: fetcher,
-		chooser: chooser,
-		poster:  poster,
+		fetcher:      fetcher,
+		chooser:      chooser,
+		poster:       poster,
+		URLShortener: URLShortener,
 	}
 }
 
@@ -105,6 +107,13 @@ func (pp *PostProduct) Do() error {
 
 	productPrice := product.PriceHistory[len(product.PriceHistory)-1].Price.RUB
 
+	// Сокращаем ссылку для получения статистики
+
+	shortURL, err := pp.URLShortener.GetShortURL(product.Link)
+	if err != nil {
+		return fmt.Errorf("can't get short url: %w", err)
+	}
+
 	// Подготавливаем пост
 
 	content := fmt.Sprintf("Цена 💳 %d руб.\nРейтинг ⭐️ %.1f на 💬 %d отзывов", productPrice/100, product.Rating, product.ReviewCount)
@@ -123,7 +132,7 @@ func (pp *PostProduct) Do() error {
 		Title:   fmt.Sprintf("%s от %s", product.Name, product.Brand),
 		Content: content,
 		Images:  postImages,
-		Link:    product.Link,
+		Link:    shortURL,
 	}
 
 	// Публикуем пост
