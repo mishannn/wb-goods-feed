@@ -1,11 +1,10 @@
 package wildberries
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"net/url"
+
+	"github.com/mishannn/wb-goods-feed/internal/shared/httputils"
 )
 
 type Client struct {
@@ -35,33 +34,12 @@ func (*Client) GetProducts() (*Response[GetProductsResponseData], error) {
 	qs.Set("spp", "30")
 	qs.Set("suppressSpellcheck", "false")
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://recom.wb.ru/personal/ru/common/v5/search?%s", qs.Encode()), nil)
+	productsURL := fmt.Sprintf("https://recom.wb.ru/personal/ru/common/v5/search?%s", qs.Encode())
+
+	respBody, err := httputils.HttpGet[Response[GetProductsResponseData]](productsURL)
 	if err != nil {
-		return nil, fmt.Errorf("can't create request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Accept-Language", "ru-RU,ru;q=0.9")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("can't do request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	respBodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("can't read response body: %w", err)
+		return nil, fmt.Errorf("can't get recommended products: %w", err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("server sent unexpected code %d, body: %s", resp.StatusCode, respBodyBytes)
-	}
-
-	var respBody Response[GetProductsResponseData]
-	err = json.Unmarshal(respBodyBytes, &respBody)
-	if err != nil {
-		return nil, fmt.Errorf("can't unmarshal response body: %w", err)
-	}
-
-	return &respBody, nil
+	return respBody, nil
 }

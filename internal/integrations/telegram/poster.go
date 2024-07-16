@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"example.org/wbsniper/internal/entities/feed"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/mishannn/wb-goods-feed/internal/entities/feed"
 )
 
 type Poster struct {

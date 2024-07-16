@@ -3,7 +3,7 @@ package wildberries
 import (
 	"fmt"
 
-	"example.org/wbsniper/internal/entities/product"
+	"github.com/mishannn/wb-goods-feed/internal/entities/product"
 )
 
 func getProductImages(wbProduct Product) []product.Image {

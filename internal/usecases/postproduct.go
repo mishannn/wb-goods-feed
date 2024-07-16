@@ -8,8 +8,8 @@ import (
 	"strings"
 	"text/template"
 
-	"example.org/wbsniper/internal/entities/feed"
-	"example.org/wbsniper/internal/entities/product"
+	"github.com/mishannn/wb-goods-feed/internal/entities/feed"
+	"github.com/mishannn/wb-goods-feed/internal/entities/product"
 )
 
 //go:embed pricehistorychart.tmpl

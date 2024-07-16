@@ -3,8 +3,8 @@ package wildberries
 import (
 	"fmt"
 
-	"example.org/wbsniper/internal/entities/product"
-	"example.org/wbsniper/internal/shared/httputils"
+	"github.com/mishannn/wb-goods-feed/internal/entities/product"
+	"github.com/mishannn/wb-goods-feed/internal/shared/httputils"
 )
 
 type breadcrumbsDataResponse struct {

@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
-	"example.org/wbsniper/internal/entities/product"
-	"example.org/wbsniper/internal/integrations/telegram"
-	"example.org/wbsniper/internal/integrations/wildberries"
-	"example.org/wbsniper/internal/usecases"
+	"github.com/mishannn/wb-goods-feed/internal/entities/product"
+	"github.com/mishannn/wb-goods-feed/internal/integrations/telegram"
+	"github.com/mishannn/wb-goods-feed/internal/integrations/wildberries"
+	"github.com/mishannn/wb-goods-feed/internal/usecases"
 	"github.com/robfig/cron/v3"
 	"github.com/urfave/cli/v2"
 )

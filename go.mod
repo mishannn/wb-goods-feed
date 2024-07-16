@@ -1,4 +1,4 @@
-module example.org/wbsniper
+module github.com/mishannn/wb-goods-feed
 
 go 1.22.4
 
