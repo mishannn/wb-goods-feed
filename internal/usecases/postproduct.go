@@ -85,13 +85,15 @@ func (pp *PostProduct) Do() error {
 		postImages = append(postImages, feed.Image(productImage))
 	}
 
-	chartImageURL, err := generatePriceHistoryChartLink(product.PriceHistory)
-	if err != nil {
-		return fmt.Errorf("can't generate price history chart: %w", err)
+	if len(product.PriceHistory) >= 2 {
+		chartImageURL, err := generatePriceHistoryChartLink(product.PriceHistory)
+		if err != nil {
+			return fmt.Errorf("can't generate price history chart: %w", err)
+		}
+		postImages = append(postImages, feed.Image{
+			URL: chartImageURL,
+		})
 	}
-	postImages = append(postImages, feed.Image{
-		URL: chartImageURL,
-	})
 
 	productPrice := product.PriceHistory[len(product.PriceHistory)-1].Price.RUB
 
