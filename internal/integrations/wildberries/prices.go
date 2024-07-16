@@ -10,12 +10,12 @@ import (
 	"example.org/wbsniper/internal/entities/product"
 )
 
-type PriceHistoryItem struct {
+type priceHistoryItem struct {
 	Dt    int64 `json:"dt"`
-	Price Price `json:"price"`
+	Price price `json:"price"`
 }
 
-type Price struct {
+type price struct {
 	RUB int64 `json:"RUB"`
 }
 
@@ -37,7 +37,7 @@ func getProductPriceHistory(wbProduct Product) ([]product.PriceHistoryItem, erro
 		return nil, fmt.Errorf("server sent unexpected code %d, body: %s", resp.StatusCode, respBodyBytes)
 	}
 
-	var respBody []PriceHistoryItem
+	var respBody []priceHistoryItem
 	err = json.Unmarshal(respBodyBytes, &respBody)
 	if err != nil {
 		return nil, fmt.Errorf("can't unmarshal response body: %w", err)
