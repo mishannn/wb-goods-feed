@@ -20,7 +20,13 @@ func NewURLShortener(accessToken string) *URLShortener {
 }
 
 type VKAPIResponse[T any] struct {
-	Response T `json:"response"`
+	Response *T          `json:"response"`
+	Error    *VKAPIError `json:"error"`
+}
+
+type VKAPIError struct {
+	ErrorCode    int64  `json:"error_code"`
+	ErrorMessage string `json:"error_msg"`
 }
 
 type GetShortURLResponse struct {
@@ -55,6 +61,14 @@ func (us *URLShortener) GetShortURL(longURL string) (string, error) {
 	err = json.Unmarshal(respBodyBytes, &respBody)
 	if err != nil {
 		return "", fmt.Errorf("can't unmarshal response body: %w", err)
+	}
+
+	if respBody.Error != nil {
+		return "", fmt.Errorf("server sent error: %s", respBody.Error.ErrorMessage)
+	}
+
+	if respBody.Response == nil {
+		return "", fmt.Errorf("server did not send either an error or a response")
 	}
 
 	return respBody.Response.ShortURL, nil
