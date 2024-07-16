@@ -51,5 +51,14 @@ func getProductPriceHistory(wbProduct Product) ([]product.PriceHistoryItem, erro
 		})
 	}
 
+	if len(wbProduct.Sizes) != 0 {
+		result = append(result, product.PriceHistoryItem{
+			Date: time.Now(),
+			Price: product.Price{
+				RUB: wbProduct.Sizes[0].Price.Total,
+			},
+		})
+	}
+
 	return result, nil
 }
