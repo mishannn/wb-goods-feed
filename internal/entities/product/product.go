@@ -9,6 +9,7 @@ type Product struct {
 	ReviewCount  int
 	Images       []Image
 	PriceHistory []PriceHistoryItem
+	Tags         []Tag
 	Link         string
 }
 
@@ -23,4 +24,8 @@ type PriceHistoryItem struct {
 
 type Price struct {
 	RUB int64 // Копейки
+}
+
+type Tag struct {
+	Name string
 }

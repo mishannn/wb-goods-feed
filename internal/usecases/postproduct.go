@@ -63,6 +63,8 @@ func NewPostProduct(fetcher product.Fetcher, chooser product.Chooser, poster fee
 }
 
 func (pp *PostProduct) Do() error {
+	// Выбираем продукт
+
 	products, err := pp.fetcher.GetProducts()
 	if err != nil {
 		return fmt.Errorf("can't get products: %w", err)
@@ -72,6 +74,8 @@ func (pp *PostProduct) Do() error {
 	if err != nil {
 		return fmt.Errorf("can't choose product: %w", err)
 	}
+
+	// Забираем только 5 изображений
 
 	var imagesLimit int
 	if len(product.Images) >= 5 {
@@ -85,6 +89,8 @@ func (pp *PostProduct) Do() error {
 		postImages = append(postImages, feed.Image(productImage))
 	}
 
+	// Если есть история цены, генерируем ссылку на график цен
+
 	if len(product.PriceHistory) >= 2 {
 		chartImageURL, err := generatePriceHistoryChartLink(product.PriceHistory)
 		if err != nil {
@@ -95,14 +101,32 @@ func (pp *PostProduct) Do() error {
 		})
 	}
 
+	// Устанавливаем актуальную цену на товар
+
 	productPrice := product.PriceHistory[len(product.PriceHistory)-1].Price.RUB
+
+	// Подготавливаем пост
+
+	content := fmt.Sprintf("Цена 💳 %d руб.\nРейтинг ⭐️ %.1f на 💬 %d отзывов", productPrice/100, product.Rating, product.ReviewCount)
+
+	if len(product.Tags) > 0 {
+		tagsRowItems := make([]string, 0, len(product.Tags))
+		for _, tag := range product.Tags {
+			tagNameWithNoSpaces := strings.Replace(tag.Name, " ", `\_`, -1)
+			tagsRowItems = append(tagsRowItems, fmt.Sprintf("#%s", tagNameWithNoSpaces))
+		}
+
+		content = fmt.Sprintf("%s\n\n%s", strings.Join(tagsRowItems, " "), content)
+	}
 
 	post := feed.Post{
 		Title:   fmt.Sprintf("%s от %s", product.Name, product.Brand),
-		Content: fmt.Sprintf("Цена 💳 %d руб.\nРейтинг ⭐️ %.1f на 💬 %d отзывов", productPrice/100, product.Rating, product.ReviewCount),
+		Content: content,
 		Images:  postImages,
 		Link:    product.Link,
 	}
+
+	// Публикуем пост
 
 	err = pp.poster.PublishPost(post)
 	if err != nil {

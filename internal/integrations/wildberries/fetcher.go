@@ -31,6 +31,11 @@ func (f *Fetcher) GetProducts() ([]product.Product, error) {
 			return nil, fmt.Errorf("can't get product %d price history: %w", wbProduct.ID, err)
 		}
 
+		tags, err := getProductTags(wbProduct)
+		if err != nil {
+			return nil, fmt.Errorf("can't get product %d tags: %w", wbProduct.ID, err)
+		}
+
 		products = append(products, product.Product{
 			Name:         wbProduct.Name,
 			Brand:        wbProduct.Brand,
@@ -38,6 +43,7 @@ func (f *Fetcher) GetProducts() ([]product.Product, error) {
 			ReviewCount:  int(wbProduct.Feedbacks),
 			Images:       getProductImages(wbProduct),
 			PriceHistory: priceHistory,
+			Tags:         tags,
 			Link:         fmt.Sprintf("https://www.wildberries.ru/catalog/%d/detail.aspx", wbProduct.ID),
 		})
 	}
